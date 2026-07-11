@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Media Pembelajaran AR - Perangkat Keras</title>
+    <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+    <script src="assets/js/aframe-ar-nft.js"></script>
+    <script src="assets/js/audio-manager.js"></script>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body style="margin: 0px; overflow: hidden; font-family: 'Poppins', sans-serif;">
+
+    <div class="arjs-loader" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0f172a; z-index: 999; display: flex; justify-content: center; align-items: center; color: white; font-size: 18px;">
+        <div style="text-align: center;">
+            <div style="width: 50px; height: 50px; border: 5px solid #1e293b; border-top: 5px solid #22d3ee; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 15px;"></div>
+            <div>Memuat Aset 3D & Data Marker...</div>
+        </div>
+    </div>
+
+    <div class="marker-guide" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 280px; height: 280px; border: 3px dashed rgba(34, 211, 238, 0.4); border-radius: 24px; pointer-events: none; z-index: 5; transition: all 0.3s ease;"></div>
+
+    <div id="arPopup" class="ar-popup" style="position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(150px); width: 85%; max-width: 400px; background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(12px); border: 1px solid rgba(34, 211, 238, 0.3); border-radius: 20px; padding: 20px; color: white; z-index: 10; box-shadow: 0 10px 30px rgba(0,0,0,0.5); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <div id="popupIcon" style="font-size: 35px; background: rgba(34, 211, 238, 0.1); padding: 10px; border-radius: 12px; min-width: 45px; text-align: center;"></div>
+            <div>
+                <h3 id="popupTitle" style="margin: 0; font-size: 18px; color: #22d3ee; font-weight: 600;"></h3>
+                <p id="popupContent" style="margin: 5px 0 0 0; font-size: 13px; color: #cbd5e1; line-height: 1.5;"></p>
+            </div>
+        </div>
+    </div>
+
+    <div id="zoom-controls" style="position: fixed; right: 20px; top: 50%; transform: translateY(-50%); z-index: 10; display: flex; flex-direction: column; gap: 12px;">
+        <button id="zoom-in" style="width: 45px; height: 45px; border-radius: 12px; border: 1px solid rgba(34, 211, 238, 0.4); background: rgba(15, 23, 42, 0.8); color: #22d3ee; font-size: 20px; font-weight: bold; cursor: pointer; backdrop-filter: blur(8px); transition: all 0.2s;">＋</button>
+        <button id="zoom-out" style="width: 45px; height: 45px; border-radius: 12px; border: 1px solid rgba(34, 211, 238, 0.4); background: rgba(15, 23, 42, 0.8); color: #22d3ee; font-size: 20px; font-weight: bold; cursor: pointer; backdrop-filter: blur(8px); transition: all 0.2s;">－</button>
+    </div>
+
+    <a-scene 
+    vr-mode-ui="enabled: false;"
+    renderer="logarithmicDepthBuffer: true;"
+    embedded 
+    arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;">
+
+    <a-assets>
+        <a-asset-item id="gpu-model" src="assets/model/gpu.gltf"></a-asset-item>
+        <a-asset-item id="hardisk-model" src="assets/model/hardisk.gltf"></a-asset-item>
+        <a-asset-item id="keyboard-model" src="assets/model/keyboard.gltf"></a-asset-item>
+        <a-asset-item id="monitor-model" src="assets/model/monitor.gltf"></a-asset-item>
+        <a-asset-item id="motherboard-model" src="assets/model/motherboard.gltf"></a-asset-item>
+        <a-asset-item id="mouse-model" src="assets/model/mouse.gltf"></a-asset-item>
+        <a-asset-item id="printer-model" src="assets/model/printer.gltf"></a-asset-item>
+        <a-asset-item id="processor-model" src="assets/model/processor.gltf"></a-asset-item>
+        <a-asset-item id="psu-model" src="assets/model/psu.gltf"></a-asset-item>
+        <a-asset-item id="ram-model" src="assets/model/ram.gltf"></a-asset-item>
+        <a-asset-item id="speaker-model" src="assets/model/speaker.gltf"></a-asset-item>
+    </a-assets>
+
+    <a-nft type="nft" url="assets/marker/gpu/gpu" smooth="true" smoothCount="10">
+        <a-entity gltf-model="#gpu-model" scale="5 5 5" position="0 0 0" rotation="-90 0 0"></a-entity>
+        <a-text value="01. Grafis (GPU)" position="0 150 0" rotation="-90 0 0" scale="100 100 100" align="center" color="#22D3EE" font="kelsonsans"></a-text>
+        <a-text value="Fungsi: Mengolah dan menampilkan grafis gambar ke layar monitor" position="0 110 50" rotation="-90 0 0" scale="70 70 70" align="center" color="#FFFFFF"></a-text>
+    </a-nft>
+
+    <a-nft type="nft" url="assets/marker/hardisk/hardisk" smooth="true" smoothCount="10">
+        <a-entity gltf-model="#hardisk-model" scale="5 5 5" position="0 0 0" rotation="-90 0 0"></a-entity>
+        <a-text value="02. Harddisk / SSD" position="0 150 0" rotation="-90 0 0" scale="100 100 100" align="center" color="#22D3EE" font="kelsonsans"></a-text>
+        <a-text value="Fungsi: Media penyimpanan file dan data sistem secara permanen" position="0 110 50" rotation="-90 0 0" scale="70 70 70" align="center" color="#FFFFFF"></a-text>
+    </a-nft>
+
+    <a-nft type="nft" url="assets/marker/keyboard/keyboard" smooth="true" smoothCount="10">
+        <a-entity gltf-model="#keyboard-model" scale="5 5 5" position="0 0 0" rotation="-90 0 0"></a-entity>
+        <a-text value="03. Papan Ketik (Keyboard)" position="0 150 0" rotation="-90 0 0" scale="100 100 100" align="center" color="#22D3EE" font="kelsonsans"></a-text>
+        <a-text value="Fungsi: Memasukkan data berupa huruf, angka, dan perintah teks" position="0 110 50" rotation="-90 0 0" scale="70 70 70" align="center" color="#FFFFFF"></a-text>
+    </a-nft>
+
+    <a-nft type="nft" url="assets/marker/monitor/monitor" smooth="true" smoothCount="10">
+        <a-entity gltf-model="#monitor-model" scale="5 5 5" position="0 0 0" rotation="-90 0 0"></a-entity>
+        <a-text value="04. Layar Monitor" position="0 150 0" rotation="-90 0 0" scale="100 100 100" align="center" color="#22D3EE" font="kelsonsans"></a-text>
+        <a-text value="Fungsi: Menampilkan antarmuka visual hasil pemrosesan komputer" position="0 110 50" rotation="-90 0 0" scale="70 70 70" align="center" color="#FFFFFF"></a-text>
+    </a-nft>
+
+    <a-nft type="nft" url="assets/marker/motherboard/motherboard" smooth="true" smoothCount="10">
+        <a-entity gltf-model="#motherboard-model" scale="5 5 5" position="0 0 0" rotation="-90 0 0"></a-entity>
+        <a-text value="05. Papan Induk (Motherboard)" position="0 150 0" rotation="-90 0 0" scale="100 100 100" align="center" color="#22D3EE" font="kelsonsans"></a-text>
+        <a-text value="Fungsi: Papan sirkuit utama tempat menghubungkan seluruh hardware" position="0 110 50" rotation="-90 0 0" scale="70 70 70" align="center" color="#FFFFFF"></a-text>
+    </a-nft>
+
+    <a-nft type="nft" url="assets/marker/mouse/mouse" smooth="true" smoothCount="10">
+        <a-entity gltf-model="#mouse-model" scale="5 5 5" position="0 0 0" rotation="-90 0 0"></a-entity>
+        <a-text value="06. Tetikus (Mouse)" position="0 150 0" rotation="-90 0 0" scale="100 100 100" align="center" color="#22D3EE" font="kelsonsans"></a-text>
+        <a-text value="Fungsi: Menggerakkan kursor panah dan memilih menu di layar" position="0 110 50" rotation="-90 0 0" scale="70 70 70" align="center" color="#FFFFFF"></a-text>
+    </a-nft>
+
+    <a-nft type="nft" url="assets/marker/printer/printer" smooth="true" smoothCount="10">
+        <a-entity gltf-model="#printer-model" scale="5 5 5" position="0 0 0" rotation="-90 0 0"></a-entity>
+        <a-text value="07. Mesin Cetak (Printer)" position="0 150 0" rotation="-90 0 0" scale="100 100 100" align="center" color="#22D3EE" font="kelsonsans"></a-text>
+        <a-text value="Fungsi: Mencetak dokumen digital menjadi lembaran kertas fisik" position="0 110 50" rotation="-90 0 0" scale="70 70 70" align="center" color="#FFFFFF"></a-text>
+    </a-nft>
+
+    <a-nft type="nft" url="assets/marker/procesor/procesor" smooth="true" smoothCount="10">
+        <a-entity gltf-model="#processor-model" scale="5 5 5" position="0 0 0" rotation="-90 0 0"></a-entity>
+        <a-text value="08. Central Processing Unit (CPU)" position="0 150 0" rotation="-90 0 0" scale="100 100 100" align="center" color="#22D3EE" font="kelsonsans"></a-text>
+        <a-text value="Fungsi: Otak komputer yang mengontrol dan memproses data materi" position="0 110 50" rotation="-90 0 0" scale="70 70 70" align="center" color="#FFFFFF"></a-text>
+    </a-nft>
+
+    <a-nft type="nft" url="assets/marker/psu/psu" smooth="true" smoothCount="10">
+        <a-entity gltf-model="#psu-model" scale="5 5 5" position="0 0 0" rotation="-90 0 0"></a-entity>
+        <a-text value="09. Power Supply Unit (PSU)" position="0 150 0" rotation="-90 0 0" scale="100 100 100" align="center" color="#22D3EE" font="kelsonsans"></a-text>
+        <a-text value="Fungsi: Membagi arus listrik ke seluruh komponen di dalam casing" position="0 110 50" rotation="-90 0 0" scale="70 70 70" align="center" color="#FFFFFF"></a-text>
+    </a-nft>
+
+    <a-nft type="nft" url="assets/marker/ram/ram" smooth="true" smoothCount="10">
+        <a-entity gltf-model="#ram-model" scale="5 5 5" position="0 0 0" rotation="-90 0 0"></a-entity>
+        <a-text value="10. Random Access Memory (RAM)" position="0 150 0" rotation="-90 0 0" scale="100 100 100" align="center" color="#22D3EE" font="kelsonsans"></a-text>
+        <a-text value="Fungsi: Menyimpan data aplikasi secara sementara saat PC menyala" position="0 110 50" rotation="-90 0 0" scale="70 70 70" align="center" color="#FFFFFF"></a-text>
+    </a-nft>
+
+    <a-nft type="nft" url="assets/marker/speaker/speaker" smooth="true" smoothCount="10">
+        <a-entity gltf-model="#speaker-model" scale="5 5 5" position="0 0 0" rotation="-90 0 0"></a-entity>
+        <a-text value="11. Pengeras Suara (Speaker)" position="0 150 0" rotation="-90 0 0" scale="100 100 100" align="center" color="#22D3EE" font="kelsonsans"></a-text>
+        <a-text value="Fungsi: Mengeluarkan gelombang sinyal audio/suara dari komputer" position="0 110 50" rotation="-90 0 0" scale="70 70 70" align="center" color="#FFFFFF"></a-text>
+    </a-nft>
+
+    <a-entity camera json-equalizer-watch></a-entity>
+
+</a-scene>
+
+<script>
+    // --- 1. MEMBUAT TOMBOL MENU UTAMA ---
+    const backButton = document.createElement('a');
+    backButton.href = 'index.html';
+    backButton.innerHTML = '🧭 Menu Utama';
+    backButton.setAttribute('style', `
+        position: fixed; top: 20px; left: 20px; z-index: 10000;
+        display: flex; align-items: center; gap: 8px; padding: 12px 22px;
+        background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(12px);
+        color: #ffffff; text-decoration: none; font-family: 'Poppins', sans-serif;
+        font-size: 15px; font-weight: 600; border-radius: 50px; border: 2px solid #22d3ee;
+        box-shadow: 0 0 15px rgba(34,211,238,0.4); transition: all 0.3s ease;
+    `);
+
+    backButton.addEventListener('mouseenter', () => {
+        backButton.style.background = '#22d3ee';
+        backButton.style.color = '#0f172a';
+        backButton.style.transform = 'scale(1.05)';
+    });
+    backButton.addEventListener('mouseleave', () => {
+        backButton.style.background = 'rgba(15, 23, 42, 0.85)';
+        backButton.style.color = '#ffffff';
+        backButton.style.transform = 'scale(1)';
+    });
+    document.body.appendChild(backButton);
+
+    // --- 2. HIDE AR ENGINE LOADER JIKA SUDAH SIAP ---
+    window.addEventListener('arjs-nft-loaded', () => {
+        const loader = document.querySelector('.arjs-loader');
+        if (loader) loader.style.display = 'none';
+    });
+
+    // --- 3. LOGIKA ZOOM KAMERA (Prioritas 6) ---
+    const cameraEl = document.getElementById('mainCamera');
+    let currentZoom = 1; // Default fov scale factor
+
+    document.getElementById('zoom-in').addEventListener('click', () => {
+        if (currentZoom < 2.5) {
+            currentZoom += 0.15;
+            applyZoom();
+        }
+    });
+
+    document.getElementById('zoom-out').addEventListener('click', () => {
+        if (currentZoom > 0.5) {
+            currentZoom -= 0.15;
+            applyZoom();
+        }
+    });
+
+    function applyZoom() {
+        // Mengubah skala objek-objek 3D secara proporsional sebagai alternatif zoom kamera di WebAR
+        const models = document.querySelectorAll('.ar-model');
+        models.forEach(model => {
+            if (!model.hasAttribute('data-orig-scale')) {
+                model.setAttribute('data-orig-scale', model.getAttribute('scale'));
+            }
+            const origScale = model.getAttribute('data-orig-scale').split(' ').map(Number);
+            model.setAttribute('scale', `${origScale[0] * currentZoom} ${origScale[1] * currentZoom} ${origScale[2] * currentZoom}`);
+        });
+    }
+
+    // --- DATA POPUP & INTEGRASI AUDIO ---
+    const popupData = {
+        motherboard: { icon: "🔌", title: "Motherboard", desc: "Papan sirkuit elektronik utama yang menjadi pusat penghubung seluruh komponen perangkat keras komputer." },
+        gpu: { icon: "🎮", title: "GPU (VGA Card)", desc: "Mengolah data grafis digital dan menampilkan visual interaktif ke layar monitor." },
+        ram: { icon: "⚡", title: "RAM", desc: "Media penyimpanan data kerja sementara yang dapat diakses acak dengan kecepatan tinggi." },
+        hardisk: { icon: "💾", title: "Harddisk", desc: "Media penyimpanan sekunder magnetik utama untuk file sistem dan dokumen pengguna." },
+        keyboard: { icon: "⌨️", title: "Keyboard", desc: "Perangkat input utama berupa papan ketik untuk mengirim perintah teks dan fungsi." },
+        mouse: { icon: "🖱️", title: "Mouse", desc: "Perangkat penunjuk (*pointing device*) untuk mengontrol kursor navigasi antarmuka." },
+        monitor: { icon: "🖥️", title: "Monitor", desc: "Perangkat output visual utama untuk menampilkan data grafis dari komputer." },
+        printer: { icon: "🖨️", title: "Printer", desc: "Perangkat keras output yang berfungsi mencetak teks digital ke media fisik kertas." },
+        procesor: { icon: "🧠", title: "Processor (CPU)", desc: "Unit pemroses pusat yang bertindak sebagai otak utama pengendali instruksi komputasi." },
+        psu: { icon: "🔋", title: "Power Supply Unit", desc: "Mengonversi arus listrik AC menjadi DC untuk menyuplai daya bagi seluruh komponen dalam casing." },
+        speaker: { icon: "🔊", title: "Speaker", desc: "Perangkat output audio untuk mengubah sinyal listrik digital menjadi getaran gelombang suara." }
+    };
+
+    const markers = document.querySelectorAll('a-nft');
+    markers.forEach(marker => {
+        const component = marker.getAttribute('data-component');
+        const audioPath = marker.getAttribute('data-audio');
+
+        if (component) {
+            if (typeof audioManager !== 'undefined' && audioPath) {
+                audioManager.initAudio(component, audioPath);
+            }
+
+            // Event Marker Terdeteksi
+            marker.addEventListener('markerFound', () => {
+                const guide = document.querySelector(".marker-guide");
+                guide.style.borderColor = "#22d3ee";
+                guide.style.boxShadow = "0 0 20px rgba(34, 211, 238, 0.5)";
+
+                if (typeof audioManager !== 'undefined') {
+                    audioManager.playAudio(component);
+                }
+
+                const data = popupData[component];
+                if (data) {
+                    document.getElementById('popupIcon').innerHTML = data.icon;
+                    document.getElementById('popupTitle').innerHTML = data.title;
+                    document.getElementById('popupContent').innerHTML = data.desc;
+                    
+                    const popup = document.getElementById('arPopup');
+                    popup.style.transform = "translateX(-50%) translateY(0px)";
+                }
+            });
+
+            // Event Marker Hilang
+            marker.addEventListener('markerLost', () => {
+                const guide = document.querySelector(".marker-guide");
+                guide.style.borderColor = "rgba(34, 211, 238, 0.4)";
+                guide.style.boxShadow = "none";
+
+                if (typeof audioManager !== 'undefined') {
+                    audioManager.stopAudio(component);
+                }
+
+                const popup = document.getElementById('arPopup');
+                popup.style.transform = "translateX(-50%) translateY(150px)";
+            });
+        }
+    });
+</script>
+
+<style>
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    #zoom-controls button:active {
+        background: #22d3ee !important;
+        color: #0f172a !important;
+        transform: scale(0.95);
+    }
+</style>
+</body>
+</html>
