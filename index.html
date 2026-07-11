@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petualangan AR - Perangkat Keras Komputer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+<style>
+:root {
+    --primary: #3B82F6;
+    --secondary: #22D3EE;
+    --purple: #8B5CF6;
+    --dark: #020617;
+    --dark2: #0F172A;
+    --light: #F8FAFC;
+    --neon-blue: #00f0ff;
+    --neon-purple: #bd00ff;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Quicksand', sans-serif;
+    min-height: 100vh;
+    background: radial-gradient(circle at top, #1E3A8A 0%, #0F172A 50%, #020617 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* Animasi Background Partikel Luar Angkasa */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.2) 1px, transparent 1px);
+    background-size: 40px 40px;
+    z-index: 0;
+    animation: spaceMove 20s linear infinite;
+}
+
+@keyframes spaceMove {
+    from { background-position: 0 0; }
+    to { background-position: 40px 40px; }
+}
+
+.container {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    width: 100%;
+    max-width: 1200px;
+    padding: 40px 20px;
+}
+
+/* Judul Bergaya Game Futuristik */
+h1 {
+    font-family: 'Fredoka One', cursive;
+    color: white;
+    font-size: 4.5rem;
+    letter-spacing: 2px;
+    text-shadow: 0 0 10px var(--neon-blue), 0 0 20px var(--neon-blue), 0 0 40px var(--primary);
+    animation: floatTitle 4s ease-in-out infinite;
+}
+
+@keyframes floatTitle {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-10px) scale(1.02); }
+}
+
+.subtitle {
+    margin-top: 15px;
+    margin-bottom: 60px;
+    color: #94a3b8;
+    font-size: 1.4rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+/* Menu Layout */
+.menu-wrapper {
+    display: flex;
+    justify-content: center;
+    gap: 35px;
+    flex-wrap: wrap;
+}
+
+/* Card Modern Bergaya Cyberpunk Glassmorphism */
+.card {
+    width: 320px;
+    padding: 40px 30px;
+    text-decoration: none;
+    background: rgba(15, 23, 42, 0.75);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 32px;
+    border: 2px solid rgba(255, 255, 255, 0.08);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+}
+
+.card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: 0.6s;
+}
+
+.card:hover::before {
+    left: 100%;
+}
+
+.card:hover {
+    transform: translateY(-15px) scale(1.03);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Efek Glow & Warna Spesifik Sesuai Kategori */
+.card-learn:hover { box-shadow: 0 0 30px rgba(34, 211, 238, 0.4), inset 0 0 15px rgba(34, 211, 238, 0.2); }
+.card-quiz:hover { box-shadow: 0 0 30px rgba(59, 130, 246, 0.4), inset 0 0 15px rgba(59, 130, 246, 0.2); }
+.card-marker:hover { box-shadow: 0 0 30px rgba(139, 92, 246, 0.4), inset 0 0 15px rgba(139, 92, 246, 0.2); }
+
+/* Lingkaran Ikon Game */
+.icon-circle {
+    width: 110px;
+    height: 110px;
+    margin: 0 auto 30px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3.2rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.card-learn .icon-circle { color: #22d3ee; box-shadow: 0 0 15px rgba(34, 211, 238, 0.2); }
+.card-quiz .icon-circle { color: #3b82f6; box-shadow: 0 0 15px rgba(59, 130, 246, 0.2); }
+.card-marker .icon-circle { color: #8b5cf6; box-shadow: 0 0 15px rgba(139, 92, 246, 0.2); }
+
+.card:hover .icon-circle {
+    transform: rotate(10deg) scale(1.1);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.card h2 {
+    color: white;
+    font-size: 2rem;
+    margin-bottom: 12px;
+    font-family: 'Fredoka One', cursive;
+    transition: all 0.3s;
+}
+
+.card-learn:hover h2 { text-shadow: 0 0 8px #22d3ee; }
+.card-quiz:hover h2 { text-shadow: 0 0 8px #3b82f6; }
+.card-marker:hover h2 { text-shadow: 0 0 8px #8b5cf6; }
+
+.card p {
+    color: #94a3b8;
+    font-size: 1.05rem;
+    line-height: 1.6;
+}
+
+/* Kontrol Audio BGM Utama di Pojok Atas Layar */
+.audio-control-btn {
+    position: fixed;
+    top: 25px;
+    right: 25px;
+    z-index: 100;
+    background: rgba(15, 23, 42, 0.8);
+    border: 2px solid rgba(34, 211, 238, 0.5);
+    color: white;
+    padding: 10px 18px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 0 15px rgba(34, 211, 238, 0.3);
+    transition: all 0.3s;
+}
+
+.audio-control-btn:hover {
+    background: #22d3ee;
+    color: #020617;
+    transform: scale(1.05);
+}
+
+/* Objek Dekoratif Terbang / Melayang */
+.decoration {
+    position: fixed;
+    z-index: 1;
+    opacity: 0.15;
+    pointer-events: none;
+    animation: pulseGlow 6s infinite alternate;
+}
+
+@keyframes pulseGlow {
+    0% { transform: translateY(0) scale(1) rotate(0deg); opacity: 0.15; }
+    100% { transform: translateY(-20px) scale(1.05) rotate(15deg); opacity: 0.3; }
+}
+
+/* Responsive Device Breakpoints */
+@media(max-width: 768px) {
+    h1 { font-size: 3.2rem; }
+    .subtitle { font-size: 1.1rem; margin-bottom: 40px; }
+    .menu-wrapper { gap: 25px; }
+    .card { width: 290px; }
+}
+
+@media(max-width: 480px) {
+    h1 { font-size: 2.5rem; }
+    .card { width: 100%; max-width: 340px; }
+}
+</style>
+</head>
+<body>
+
+    <button class="audio-control-btn" id="bgmToggle">
+        <i class="fa-solid fa-volume-xmark" id="audioIcon"></i>
+        <span id="audioText">Musik: OFF</span>
+    </button>
+
+    <i class="fa-solid fa-microchip decoration" style="top: 15%; left: 8%; font-size: 5rem; color: #22d3ee;"></i>
+    <i class="fa-solid fa-satellite-dish decoration" style="top: 20%; right: 10%; font-size: 4rem; color: #8b5cf6; animation-delay: 2s;"></i>
+    <i class="fa-solid fa-gamepad decoration" style="bottom: 12%; left: 10%; font-size: 6rem; color: #3b82f6; transform: rotate(-25deg); animation-delay: 1s;"></i>
+    <i class="fa-solid fa-vr-cardboard decoration" style="bottom: 15%; right: 8%; font-size: 5rem; color: #e2e8f0; animation-delay: 3s;"></i>
+
+    <div class="container">
+        <h1> HALO PETUALANGAN!</h1>
+        <p class="subtitle">Misi Pemahaman Perangkat Keras Komputer</p>
+        
+        <div class="menu-wrapper">
+            <a href="ar.html" class="card card-learn game-card"> 
+                <div class="icon-circle">
+                    <i class="fa-solid fa-cube"></i>
+                </div>
+                <h2>Belajar AR</h2>
+                <p>Scan gambarmu dan saksikan hardware 3D muncul nyata di mejamu!</p>
+            </a>
+
+            <a href="quiz.html" class="card card-quiz game-card">
+                <div class="icon-circle">
+                    <i class="fa-solid fa-trophy"></i>
+                </div>
+                <h2>Quiz Seru</h2>
+                <p>Uji pengetahuan hardware-mu, kumpulkan skor tertinggi dan taklukkan misinya!</p>
+            </a>
+
+            <a href="marker.html" class="card card-marker game-card">
+                <div class="icon-circle">
+                    <i class="fa-solid fa-images"></i>
+                </div>
+                <h2>Lihat Marker</h2>
+                <p>Lihat dan dapatkan kumpulan kartu target pelacak sensor kamera AR.</p>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. HANDLING SOUND BGM SECARA MODERAT & VALID ---
+        let bgm = new Audio();
+        bgm.src = "assets/audio/bgm-main.mp3"; // Sediakan file musik mp3 umum di folder audio Anda
+        bgm.loop = true;
+        let isPlaying = false;
+
+        const bgmToggle = document.getElementById('bgmToggle');
+        const audioIcon = document.getElementById('audioIcon');
+        const audioText = document.getElementById('audioText');
+
+        bgmToggle.addEventListener('click', () => {
+            if (!isPlaying) {
+                bgm.play().then(() => {
+                    isPlaying = true;
+                    audioIcon.className = "fa-solid fa-volume-high";
+                    audioText.innerText = "Musik: ON";
+                    bgmToggle.style.borderColor = "#22c55e";
+                }).catch(err => {
+                    console.log("Izin audio diblokir browser. Butuh interaksi user terlebih dahulu.");
+                });
+            } else {
+                bgm.pause();
+                isPlaying = false;
+                audioIcon.className = "fa-solid fa-volume-xmark";
+                audioText.innerText = "Musik: OFF";
+                bgmToggle.style.borderColor = "rgba(34, 211, 238, 0.5)";
+            }
+        });
+
+        // --- 2. EFEK SUARA HOVER INTERAKTIF PADA KARTU MENU ---
+        const gameCards = document.querySelectorAll('.game-card');
+        
+        // Inisialisasi audio hover instan
+        const hoverSound = new Audio();
+        hoverSound.src = "assets/audio/hover-click.mp3"; // Gunakan audio klik pendek (~0.5 detik) jika ada
+        hoverSound.volume = 0.5;
+
+        gameCards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                // Mainkan suara hover jika BGM aktif
+                if (isPlaying) {
+                    hoverSound.currentTime = 0;
+                    hoverSound.play().catch(e => {/* Muted jika belum berinteraksi */});
+                }
+            });
+        });
+    </script>
+</body>
+</html>
